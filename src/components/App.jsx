@@ -1,9 +1,10 @@
 import React from 'react';
 import { Serchbar } from './Serchbar/Serchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
-// import css from './App.module.css';
-// axios.defaults.baseURL =
-//   'https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12';
+import LoadMore from './LoadMore/LoadMore';
+import hitsApi from '../services/hits-api';
+import Spinner from './Spinner/Spinner';
+import Modal from './Modal/Modal';
 
 export class App extends React.Component {
   state = {
@@ -12,46 +13,55 @@ export class App extends React.Component {
     name: '',
     loading: false,
     error: null,
+    showModal: false,
+    modalImage: null,
   };
-  handleSubmit = name => {
-    this.setState({ name, page: 1, hits: [] });
-  };
+
   componentDidUpdate(_, prevState) {
     const { name, page } = this.state;
     if (prevState.page !== page || prevState.name !== name) {
-      console.log('Fetch data');
-      fetch(
-        `https://pixabay.com/api/?q=${name}&page=${page}&key=28547826-2a3958dff886d94a7e7d0694c&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
+      this.setState({ loading: true, hits: [] });
 
-          return Promise.reject(
-            new Error(`Нет картинки с таким именим ${name}`)
-          );
-        })
+      hitsApi
+        .hits(name, page)
         .then(name => this.setState(name))
-        .catch(error => this.setState(error));
+        .catch(error => this.setState(error))
+        .finally(() => this.setState({ loading: false }));
     }
   }
 
+  handleSubmit = name => {
+    this.setState({ name, page: 1, hits: [] });
+  };
+
+  togleModal = modalImage => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+    this.setState({ modalImage });
+  };
+
+  loadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
   render() {
+    const { hits, loading, showModal, modalImage } = this.state;
+
     return (
       <div>
         <Serchbar onSubmit={this.handleSubmit} />
-        <ImageGallery items={this.state.hits} />
+        {loading && <Spinner />}
+        <ImageGallery items={hits} openModal={this.togleModal} />
+        {showModal && (
+          <Modal
+            image={hits}
+            modalImage={modalImage}
+            onClose={this.togleModal}
+          />
+        )}
+        {hits.length > 0 && (
+          <LoadMore onclick={this.loadMore}>Load more</LoadMore>
+        )}
       </div>
     );
   }
 }
-
-// async componentDidMount() {
-//     try {
-//       const response = await axios.get(
-//         'https://pixabay.com/api/?q=cat&page=1&key=28547826-2a3958dff886d94a7e7d0694c&image_type=photo&orientation=horizontal&per_page=12'
-//       );
-//       console.log(response.data);
-//     } catch (error) {}
-//   }
