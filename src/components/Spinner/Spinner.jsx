@@ -1,6 +1,6 @@
 import { Audio } from 'react-loader-spinner';
 
-const Spinner = () => {
+export const Spinner = () => {
   return (
     <Audio
       height="80"
@@ -10,8 +10,7 @@ const Spinner = () => {
       ariaLabel="loading"
       wrapperStyle={{}}
       wrapperClassName=""
+      visible={true}
     />
   );
 };
-
-export default Spinner;

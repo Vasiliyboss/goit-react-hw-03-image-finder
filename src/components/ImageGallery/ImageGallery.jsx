@@ -1,6 +1,6 @@
-import ImageGalleryItems from 'components/ImageGalleryItems/ImageGalleryItems';
+import { ImageGalleryItems } from 'components/ImageGalleryItems/ImageGalleryItems';
 import css from './ImageGallery.module.css';
-const ImageGallery = ({ items, openModal }) => {
+export const ImageGallery = ({ items, openModal }) => {
   return (
     <ul className={css.ImageGallery}>
       {items.map(item => (
@@ -11,5 +11,3 @@ const ImageGallery = ({ items, openModal }) => {
     </ul>
   );
 };
-
-export default ImageGallery;

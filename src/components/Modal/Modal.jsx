@@ -1,6 +1,6 @@
 import css from './Modal.module.css';
 import { Component } from 'react';
-class Modal extends Component {
+export class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeydown);
   }
@@ -25,11 +25,9 @@ class Modal extends Component {
     return (
       <div className={css.Overlay} onClick={this.handelBackdrop}>
         <div className={css.Modal}>
-          <img src={modalImage} alt={modalImage} />
+          <img src={modalImage} alt="" />
         </div>
       </div>
     );
   }
 }
-
-export default Modal;

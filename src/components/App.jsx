@@ -1,37 +1,42 @@
 import React from 'react';
 import { Serchbar } from './Serchbar/Serchbar';
-import ImageGallery from './ImageGallery/ImageGallery';
-import LoadMore from './LoadMore/LoadMore';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { LoadMore } from './LoadMore/LoadMore';
 import hitsApi from '../services/hits-api';
-import Spinner from './Spinner/Spinner';
-import Modal from './Modal/Modal';
+import { Spinner } from './Spinner/Spinner';
+import { Modal } from './Modal/Modal';
 
 export class App extends React.Component {
   state = {
-    page: '',
-    hits: [],
+    page: 1,
+    photoHits: [],
     name: '',
     loading: false,
     error: null,
     showModal: false,
     modalImage: null,
+    status: 'idle',
   };
 
   componentDidUpdate(_, prevState) {
     const { name, page } = this.state;
     if (prevState.page !== page || prevState.name !== name) {
-      this.setState({ loading: true, hits: [] });
+      this.setState({ status: 'pending' });
 
       hitsApi
-        .hits(name, page)
-        .then(name => this.setState(name))
-        .catch(error => this.setState(error))
-        .finally(() => this.setState({ loading: false }));
+        .galleryApi(name, page)
+        .then(photoHits =>
+          this.setState(state => ({
+            photoHits: [...state.photoHits, ...photoHits.hits],
+            status: 'resolved',
+          }))
+        )
+        .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
 
   handleSubmit = name => {
-    this.setState({ name, page: 1, hits: [] });
+    this.setState({ name, page: 1, photoHits: [] });
   };
 
   togleModal = modalImage => {
@@ -44,22 +49,24 @@ export class App extends React.Component {
   };
 
   render() {
-    const { hits, loading, showModal, modalImage } = this.state;
+    const { photoHits, error, status, showModal, modalImage } = this.state;
 
     return (
       <div>
         <Serchbar onSubmit={this.handleSubmit} />
-        {loading && <Spinner />}
-        <ImageGallery items={hits} openModal={this.togleModal} />
+
+        <ImageGallery items={photoHits} openModal={this.togleModal} />
+        {photoHits.length > 0 && status !== 'pending' && (
+          <LoadMore onclick={this.loadMore}>Load more</LoadMore>
+        )}
+        {status === 'pending' && <Spinner />}
+        {status === 'rejected' && <h1>{error.message}</h1>}
         {showModal && (
           <Modal
-            image={hits}
+            image={photoHits}
             modalImage={modalImage}
             onClose={this.togleModal}
           />
-        )}
-        {hits.length > 0 && (
-          <LoadMore onclick={this.loadMore}>Load more</LoadMore>
         )}
       </div>
     );

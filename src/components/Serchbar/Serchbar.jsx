@@ -9,16 +9,15 @@ export class Serchbar extends React.Component {
   };
   handleFormSubmit = e => {
     e.preventDefault();
-    if (this.state.name.trim() === ' ') {
-      alert('Add word');
+
+    if (this.state.name.trim() === '') {
+      alert('Введіть слово');
       return;
     }
     this.props.onSubmit(this.state.name);
-    this.setState({
-      name: '',
-    });
-    // e.target.reset();
+    this.setState({ name: '' });
   };
+
   render() {
     return (
       <header className={css.Searchbar}>
@@ -33,8 +32,8 @@ export class Serchbar extends React.Component {
             className={css.SearchFormInput}
             type="text"
             name="name"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
           />
         </form>
