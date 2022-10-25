@@ -19,18 +19,21 @@ export class App extends React.Component {
   };
 
   componentDidUpdate(_, prevState) {
-    const { name, page } = this.state;
+    const { name, page, modalImage } = this.state;
     if (prevState.page !== page || prevState.name !== name) {
       this.setState({ status: 'pending' });
 
       hitsApi
         .galleryApi(name, page)
-        .then(photoHits =>
+        .then(photoHits => {
+          if (modalImage === 0) {
+            this.setState({ error: `images ${name} not found` });
+          }
           this.setState(state => ({
             photoHits: [...state.photoHits, ...photoHits.hits],
             status: 'resolved',
-          }))
-        )
+          }));
+        })
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }

@@ -1,4 +1,6 @@
 import css from './ImageGalleryItems.module.css';
+import PropTypes from 'prop-types';
+import { func } from 'prop-types';
 export const ImageGalleryItems = ({ image, open }) => {
   return (
     <img
@@ -8,4 +10,9 @@ export const ImageGalleryItems = ({ image, open }) => {
       onClick={() => open(image.largeImageURL)}
     />
   );
+};
+
+ImageGalleryItems.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({ image: PropTypes.image })),
+  open: func.isRequired,
 };

@@ -1,5 +1,6 @@
 import { ImageGalleryItems } from 'components/ImageGalleryItems/ImageGalleryItems';
 import css from './ImageGallery.module.css';
+import PropTypes from 'prop-types';
 export const ImageGallery = ({ items, openModal }) => {
   return (
     <ul className={css.ImageGallery}>
@@ -10,4 +11,10 @@ export const ImageGallery = ({ items, openModal }) => {
       ))}
     </ul>
   );
+};
+
+ImageGallery.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.number.isRequired })
+  ),
 };

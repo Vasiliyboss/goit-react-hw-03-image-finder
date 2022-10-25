@@ -1,5 +1,6 @@
 import React from 'react';
 import css from './Serchbar.module.css';
+import PropTypes from 'prop-types';
 export class Serchbar extends React.Component {
   state = {
     name: '',
@@ -15,7 +16,7 @@ export class Serchbar extends React.Component {
       return;
     }
     this.props.onSubmit(this.state.name);
-    this.setState({ name: '' });
+    // this.setState({ name: '' });
   };
 
   render() {
@@ -41,3 +42,7 @@ export class Serchbar extends React.Component {
     );
   }
 }
+
+Serchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

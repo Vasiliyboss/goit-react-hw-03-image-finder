@@ -1,5 +1,6 @@
 import css from './Modal.module.css';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 export class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeydown);
@@ -31,3 +32,8 @@ export class Modal extends Component {
     );
   }
 }
+
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  modalImage: PropTypes.func.isRequired,
+};
