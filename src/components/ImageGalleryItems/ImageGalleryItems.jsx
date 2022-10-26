@@ -13,6 +13,12 @@ export const ImageGalleryItems = ({ image, open }) => {
 };
 
 ImageGalleryItems.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({ image: PropTypes.image })),
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    })
+  ),
   open: func.isRequired,
 };

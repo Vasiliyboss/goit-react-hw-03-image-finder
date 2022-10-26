@@ -1,15 +1,15 @@
 import css from './LoadMore.module.css';
 import PropTypes from 'prop-types';
 
-export const LoadMore = ({ onclick, children }) => {
+export const LoadMore = ({ onLoadClick, children }) => {
   return (
-    <button type="button" onClick={onclick} className={css.Button}>
+    <button type="button" onClick={onLoadClick} className={css.Button}>
       {children}
     </button>
   );
 };
 
 LoadMore.propTypes = {
-  onClick: PropTypes.func,
+  onLoadClick: PropTypes.func,
   children: PropTypes.string.isRequired,
 };

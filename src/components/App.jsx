@@ -39,7 +39,9 @@ export class App extends React.Component {
   }
 
   handleSubmit = name => {
-    this.setState({ name, page: 1, photoHits: [] });
+    if (this.state.name !== name) {
+      this.setState({ name, page: 1, photoHits: [] });
+    }
   };
 
   togleModal = modalImage => {
@@ -60,7 +62,7 @@ export class App extends React.Component {
 
         <ImageGallery items={photoHits} openModal={this.togleModal} />
         {photoHits.length > 0 && status !== 'pending' && (
-          <LoadMore onclick={this.loadMore}>Load more</LoadMore>
+          <LoadMore onLoadClick={this.loadMore}>Load more</LoadMore>
         )}
         {status === 'pending' && <Spinner />}
         {status === 'rejected' && <h1>{error.message}</h1>}
